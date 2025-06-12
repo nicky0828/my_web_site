@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>自我介紹</title>
   <style>
-    /* 🔲 頁面背景和排版 */
     body {
       margin: 0;
       padding: 0;
@@ -17,13 +16,10 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      
-      /*  設定背景圖片 */
       background: url('pexels-photo-1366957.webp') no-repeat center center fixed;
       background-size: cover;
     }
 
-    /* 滑鼠的小圓點 */
     .cursor-dot {
       position: fixed;
       width: 12px;
@@ -36,11 +32,10 @@
       box-shadow: 0 0 15px rgba(0, 255, 170, 0.8);
     }
 
-    /* 📦 主區域 */
     .card {
       width: 460px;
       min-height: 560px;
-      background-color: rgba(0, 0, 0, 0.75); /* 半透明黑底提升可讀性 */
+      background-color: rgba(0, 0, 0, 0.75);
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 255, 170, 0.2);
       padding: 30px;
@@ -49,7 +44,6 @@
       z-index: 1;
     }
 
-    /* 頭貼 */
     .profile-pic {
       width: 120px;
       height: 120px;
@@ -64,7 +58,6 @@
       color: #00ffa0;
     }
 
-    /*  按鈕 */
     .nav-buttons {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -88,14 +81,13 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
 
-    /* 🧩 區塊自我，介紹 興趣 聯絡 期望 */
     .content-section {
-      display: none; /* 預設全部隱藏 */
+      display: none;
       margin-top: 20px;
     }
 
     .content-section.active {
-      display: block; /* 點選後顯示 */
+      display: block;
     }
 
     .content-section img {
@@ -112,69 +104,114 @@
       line-height: 1.6;
       margin-top: 10px;
     }
+
+    input[type="number"] {
+      padding: 10px;
+      width: 60%;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    #game button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 5px;
+      border-radius: 8px;
+      background-color: #00ffa0;
+      color: #000;
+      border: none;
+      cursor: pointer;
+    }
+
+    #gameResult {
+      margin-top: 10px;
+      color: #00ffa0;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
 
-  <!-- 滑鼠跟隨圓點 -->
   <div class="cursor-dot" id="cursor-dot"></div>
 
-  <!-- 📦 主區域 -->
   <div class="card">
     <img class="profile-pic" src="images.png" alt="照片" />
     <h2>林育宏</h2>
 
-    <!-- 按鈕 1：關於我） -->
-    <div class="content-section" id="about">
+    <div class="content-section active" id="about">
       <img src="IMG_4184.png" alt="關於我圖片">
       <h3>我是資訊系的學生，熱愛設計互動網頁，擅長 HTML、CSS、JavaScript。</h3>
     </div>
 
-    <!--  按鈕2：興趣 -->
     <div class="content-section" id="hobby">
       <img src="IMG_4440.jpg" alt="興趣圖片">
       <h2>我喜歡打羽球、聽音樂、寫前端互動動畫，也喜歡推廣中華文化。</h2>
     </div>
 
-    <!--  按鈕 3：聯絡方式 -->
     <div class="content-section" id="contact">
       <p>📧 Email：linyuhung@exxxxx.com<br>
          📱 電話：09xx-xxx-xxx<br>
          📍 台灣國</p>
     </div>
 
-    <!-- 按鈕4：我的期望 -->
     <div class="content-section" id="hope">
       <h1>我希望</h1>
       <img src="IMG_4842.jpg" alt="期望圖片">
     </div>
 
-    <!-- 按鈕 -->
+    <!-- 🎮 猜數字小遊戲 -->
+    <div class="content-section" id="game">
+      <h2>🎮 猜數字遊戲</h2>
+      <p>我心裡有個 1~100 的數字，你猜猜是什麼？</p>
+      <input type="number" id="guessInput" placeholder="輸入數字" />
+      <br />
+      <button onclick="checkGuess()">猜！</button>
+      <p id="gameResult"></p>
+    </div>
+
     <div class="nav-buttons">
       <button onclick="showSection('about')">關於我</button>
       <button onclick="showSection('hobby')">我的興趣</button>
       <button onclick="showSection('contact')">聯絡方式</button>
       <button onclick="showSection('hope')">我的期望</button>
+      <button onclick="showSection('game')">猜數字遊戲</button>
     </div>
   </div>
 
-  
   <script>
-    // 滑鼠跟隨圓點
+    // 滑鼠特效
     const cursor = document.getElementById('cursor-dot');
     document.addEventListener('mousemove', e => {
       cursor.style.left = e.clientX + 'px';
       cursor.style.top = e.clientY + 'px';
     });
 
-    // 切換區域內容顯示
+    // 切換內容顯示
     function showSection(id) {
-      // 全部隱藏
       document.querySelectorAll('.content-section').forEach(section => {
         section.classList.remove('active');
       });
-      // 顯示點到的區塊
       document.getElementById(id).classList.add('active');
+    }
+
+    // 猜數字小遊戲
+    let answer = Math.floor(Math.random() * 100) + 1;
+    function checkGuess() {
+      const guess = parseInt(document.getElementById("guessInput").value);
+      const result = document.getElementById("gameResult");
+
+      if (isNaN(guess)) {
+        result.textContent = "請輸入一個有效的數字！";
+      } else if (guess < answer) {
+        result.textContent = "太小了！";
+      } else if (guess > answer) {
+        result.textContent = "太大了！";
+      } else {
+        result.textContent = "🎉 恭喜你猜對了！";
+      }
     }
   </script>
 
